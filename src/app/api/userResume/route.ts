@@ -1,12 +1,13 @@
 import { NextRequest,NextResponse } from "next/server";
 import db from "@/db/dbConnection";
+import { uniqueId } from "@/helper/uniqueId";
 
 export async function POST(request:NextRequest){
     try {
         const reqHeader = request.headers
         let userId = reqHeader.get('userId')
         const {resumeName} = await request.json()
-        const resumeId = new Date().getTime()
+        const resumeId = uniqueId()
         const q = "INSERT INTO UserResume(resumeId,userId,resumeName) VALUES(?,?,?)"
         const data:any = await Promise.all([
         new Promise((resolve,reject)=>{

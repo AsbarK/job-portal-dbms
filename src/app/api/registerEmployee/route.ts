@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from '@/db/dbConnection';
-
+import { uniqueId } from "@/helper/uniqueId";
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { employeeName, password, mobile, email } = reqBody;
-        const timestamp = new Date().getTime();
+        const timestamp = uniqueId();
 
         const q = 'INSERT INTO Employee (empId, empName, emp_mobile, emp_email) VALUES (?, ?, ?, ?)';
         const q2 = 'INSERT INTO LoginEmployee (empId, login_username, employee_password) VALUES (?, ?, ?)';
