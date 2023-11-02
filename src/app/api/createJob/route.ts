@@ -5,14 +5,14 @@ export async function POST(request:NextRequest){
     try {
         const reqBody = await request.json()
         const jobId = new Date().getTime()
-        let {posted_employee,jobType,jobDescription,jobTitle,startDate,endDate} = reqBody
+        let {posted_employee,jobDescription,jobTitle,startDate,endDate} = reqBody
         if(typeof(posted_employee) === "string"){
             posted_employee = parseInt(posted_employee)
         }
-        const q = "INSERT INTO Job(jobId,posted_employee,jobType,jobDescription,jobTitle,startDate,endDate) VALUES(?,?,?,?,?,?,?)"
+        const q = "INSERT INTO Job(jobId,posted_employee,jobDescription,jobTitle,startDate,endDate) VALUES(?,?,?,?,?,?,?)"
         const data:any = await Promise.all([
             new Promise((resolve,reject)=>{
-                db.query(q,[jobId,posted_employee,jobType,jobDescription,jobTitle,startDate,endDate],(err,data)=>{
+                db.query(q,[jobId,posted_employee,jobDescription,jobTitle,startDate,endDate],(err,data)=>{
                     if(err){
                         reject(err)
                     }
