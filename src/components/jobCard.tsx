@@ -7,9 +7,11 @@ import {
 } from "@/components/ui/card"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-type jobCardProps = {avlink:string; avName:string}
+import { Badge } from "@/components/ui/badge"
+
+type jobCardProps = {avlink:string; avName:string;jobTags:Array<string>;jobTitle:string;jobDiscription:string;jobLocation:[string,string];saleryStart:string;saleryEnd:string;}
   
-  export function JobCard({avlink,avName}:jobCardProps){
+  export function JobCard({avlink,avName,jobTitle,jobTags,jobDiscription,jobLocation,saleryStart,saleryEnd}:jobCardProps){
     return (
         <Card>
             <div className="flex items-center ml-3">
@@ -18,12 +20,24 @@ type jobCardProps = {avlink:string; avName:string}
                     <AvatarFallback>{avName}</AvatarFallback>
                 </Avatar>
                 <CardHeader>
-                    <CardTitle>Job Title</CardTitle>
-                    <CardDescription>Job Description</CardDescription>
+                    <CardTitle>{jobTitle}</CardTitle>
+                    <CardDescription>{jobDiscription}</CardDescription>
                 </CardHeader>
             </div>
             <CardContent>
-                <p>Job Content</p>
+                <div>
+                <div className="flex gap-1">
+                    {jobTags.map((tag: string) => (
+                        <Badge key={tag}>{tag}</Badge>
+                    ))}
+                </div>
+                    <div className="flex gap-1">
+                        {jobLocation[0]} ,{jobLocation[1]}
+                    </div>
+                    <div className="flex gap-1">
+                        Rs{saleryStart}-Rs{saleryEnd}
+                    </div>
+                </div>
             </CardContent>
         </Card>
 
