@@ -3,7 +3,7 @@ import db from "@/db/dbConnection";
 
 export async function GET(){
     try {
-        const q = "SELECT * FROM JOB WHERE JOB.validJob = 1"
+        const q = "SELECT JOB.*,country,state,jobTagName FROM JOB INNER JOIN (SELECT jobTag.jobId,state,country,jobTagName FROM jobTag INNER JOIN jobLocation ON jobTag.jobId=jobLocation.jobId) AS mergeTable ON JOB.jobId=mergeTable.jobId WHERE JOB.validJob = 1"
         const data:any = await Promise.all([
             new Promise((resolve,reject)=>{
                 db.query(q,(err,data)=>{
