@@ -16,7 +16,34 @@ export async function GET(){
                 })
             })
         ])
-        return NextResponse.json({msg:"Job retrieved Successfully",data:(data[0])},{ status: 200 })
+        if(data[0]){
+            const res = data[0]
+            const groupedJobs = res.reduce((groups:any, job:any) => {
+                const { jobId, posted_employee, jobDescription, jobTitle, startDate, endDate, validJob, salreyStart, salreyEnd, country, state } = job;
+                const key = `${jobId}-${posted_employee}-${jobDescription}-${jobTitle}-${startDate}-${endDate}-${validJob}-${salreyStart}-${salreyEnd}-${country}-${state}`;
+                if (!groups[key]) {
+                  groups[key] = {
+                    jobId,
+                    posted_employee,
+                    jobDescription,
+                    jobTitle,
+                    startDate,
+                    endDate,
+                    validJob,
+                    salreyStart,
+                    salreyEnd,
+                    country,
+                    state,
+                    jobTagNames: []
+                  };
+                }
+                groups[key].jobTagNames.push(job.jobTagName);
+                return groups;
+              }, {});
+              
+                return NextResponse.json({msg:"Job retrieved Successfully",data:Object.values(groupedJobs)},{ status: 200 })
+        }
+        return NextResponse.json({msg:"No Jobs available"},{ status: 200 })
         
     } catch (error) {
         console.log(error)

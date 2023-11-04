@@ -3,8 +3,8 @@ import db from "@/db/dbConnection";
 
 export async function GET(request:NextRequest){
     try {
-        const reqHeader = request.headers
-        let empId = reqHeader.get('empId')
+        const cockieStore = request.cookies
+        let empId = cockieStore.get('empId')
         const q = "SELECT jobType,jobDescription,jobTitle,startDate,endDate FROM Job WHERE Job.posted_employee=?"
         const data:any = await Promise.all([
         new Promise((resolve,reject)=>{

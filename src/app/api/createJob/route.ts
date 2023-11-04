@@ -7,7 +7,6 @@ export async function POST(request:NextRequest){
         const reqBody = await request.json()
         const jobId = uniqueId()
         let {posted_employee,jobDescription,jobTitle,startDate,endDate,salreyStart,salreyEnd,jobTags,jobLocations} = reqBody
-        console.log(posted_employee,jobDescription,jobTitle,startDate,endDate,salreyStart,salreyEnd,jobTags,jobLocations)
         if(typeof(posted_employee) === "string"){
             posted_employee = parseInt(posted_employee)
         }
@@ -24,32 +23,47 @@ export async function POST(request:NextRequest){
                 }
             })
         }).then(async()=>{
+            try {
                 await Promise.all([
-                jobLocations.map((loc:[string,string])=>{
-                    new Promise((resolve,reject)=>{
-                        db.query(q1,[jobId,loc[0],loc[1],uniqueId()],(err,data)=>{
-                            if(err){
-                                reject(err)
-                            }
-                            else{
-                                resolve(data)
-                            }
+                    jobLocations.map((loc:[string,string])=>{
+                        new Promise((resolve,reject)=>{
+                            db.query(q1,[jobId,loc[0],loc[1],uniqueId()],(err,data)=>{
+                                if(err){
+                                    reject(err)
+                                }
+                                else{
+                                    resolve(data)
+                                }
+                            })
+                        })
+                    }),
+                    jobTags.map((tag:string)=>{
+                        new Promise((resolve,reject)=>{
+                            db.query(q2,[jobId,tag,uniqueId()],(err,data)=>{
+                                if(err){
+                                    reject(err)
+                                }
+                                else{
+                                    resolve(data)
+                                }
+                            })
                         })
                     })
-                }),
-                jobTags.map((tag:string)=>{
-                    new Promise((resolve,reject)=>{
-                        db.query(q2,[jobId,tag,uniqueId()],(err,data)=>{
-                            if(err){
-                                reject(err)
-                            }
-                            else{
-                                resolve(data)
-                            }
-                        })
-                    })
-                })
-            ])
+                ])
+            } catch (error) {
+                console.log('in err')
+                const d = await new Promise((resolve, reject) => {
+                    db.query('DELETE FROM JOB WHERE jobId=?', [jobId], (err, data) => {
+                        if (err) {
+                            console.log(err);
+                            reject(err);
+                        } else {
+                            resolve(data);
+                        }
+                    });
+                });
+                return NextResponse.json({ msg: "Please Provide all the details",d:JSON.stringify(d) }, { status: 422 });
+            }
         })
         return NextResponse.json({msg:"Job Posted Successfully",data:JSON.stringify(data)},{ status: 200 })
 

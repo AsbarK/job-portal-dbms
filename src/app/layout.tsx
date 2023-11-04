@@ -2,6 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider"
+import { cookies } from 'next/headers';
+import { ClientCookiesProvider } from '@/components/provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-background ${inter.className}`}>
+      <ClientCookiesProvider value={cookies().getAll()}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -25,6 +28,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >{children}
         </ThemeProvider>
+        </ClientCookiesProvider>
       </body>
     </html>
   )
