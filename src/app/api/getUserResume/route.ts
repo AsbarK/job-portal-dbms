@@ -1,17 +1,14 @@
 import { NextRequest,NextResponse } from "next/server";
 import db from "@/db/dbConnection";
-import { uniqueId } from "@/helper/uniqueId";
 
-export async function POST(request:NextRequest){
+export async function GET(request:NextRequest){
     try {
         const cockieStore = request.cookies
         let userId = cockieStore.get('userId')?.value
-        const {resumeName} = await request.json()
-        const resumeId = uniqueId()
-        const q = "INSERT INTO UserResume(resumeId,userId,resumeName) VALUES(?,?,?)"
+        const q = "SELECT * FROM UserResume WHERE userId=?"
         const data:any = await Promise.all([
         new Promise((resolve,reject)=>{
-            db.query(q,[resumeId,userId,resumeName],(err,data)=>{
+            db.query(q,[userId],(err,data)=>{
                 if(err){
                     reject(err)
                 }
@@ -21,7 +18,8 @@ export async function POST(request:NextRequest){
             })
         })
     ])
-    return NextResponse.json({msg:"User Resume added Succefully",data:data[0][0]},{ status: 200 })
+    console.log(data[0])
+    return NextResponse.json({msg:"User Resumes are",data:data[0]},{ status: 200 })
         
     } catch (error) {
         console.log(error)

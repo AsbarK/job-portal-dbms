@@ -7,6 +7,7 @@ export default function Jobs(props:{jobs:JobType[]}) {
         <>
             {props.jobs.map((j:JobType,index) => (
                 <JobCard
+                    jobId={j.jobId}
                     avName={j.jobTitle}
                     avlink=""
                     jobDiscription={j.jobDiscription}
