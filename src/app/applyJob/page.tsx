@@ -43,7 +43,7 @@ const FormSchema = z.object({
   }),
 })
 
-export default function ResumeApplyForm({jobId}:{jobId:string}) {
+export default function ResumeApplyForm({jobId}:any) {
   const router = useRouter();
   const [resumeNames,setResumeNames] = useState<[{resumeId:number;userId:number;resumeName:string}]>([{resumeId: 0,userId:0,resumeName:''}])
 
