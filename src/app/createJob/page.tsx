@@ -24,6 +24,8 @@ import { useEffect, useState } from "react"
 import toast from 'react-hot-toast';
 import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
+import { useCookies } from "next-client-cookies"
+
 
 
 // Define form schema
@@ -34,19 +36,41 @@ const formSchema = z.object({
   endDate: z.date(),
   salreyStart: z.string().min(5,{message:"Minimum Ammount is 10,000"}),
   salreyEnd: z.string().min(5,{message:"Minimum Ammount is 10,000"}),
+  jobTags: z.string(),
+  country: z.string(),
+  state: z.string(),
+  // jobTags:z.array(z.string())
 })
 
 // Job openings input form component
 export default function JobForm() {
+  const cockieStore = useCookies()
+  if(cockieStore.get('userId')){
+    return(
+      <>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <h1 className="text-6xl">404</h1>
+        <h2 className="text-xl">Not Found</h2>
+      </div>
+      </>
+    )
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
   // Form submission handler
   function onSubmit(data: z.infer<typeof formSchema>) {
-    // Call your API endpoint with the form data
+    // console.log(format(data.startDate,"yyyy-MM-dd"))
+
+    axios.post('http://localhost:3000/api/createJob',{
+      ...data,jobTags:data.jobTags.split(','),jobLocations:[[data.country,data.state]],startDate:format(data.startDate,"yyyy-MM-dd"),endDate:format(data.endDate,"yyyy-MM-dd")
+    }).then(()=>(
+      toast.success('Successfully Created Job')
+    )).catch(()=>(
+      toast.error('Error in Creating Job Please Try Again')
+    ))
     console.log(data);
-    console.log(new Date().setDate(new Date().getTime()+1) )
   }
 
   return (
@@ -157,7 +181,7 @@ export default function JobForm() {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date < new Date(new Date().getTime()+1)  || date > new Date("2700-01-01")
+                        date < new Date()  || date > new Date("2700-01-01")
                       }
                       initialFocus
                     />
@@ -198,6 +222,47 @@ export default function JobForm() {
           )}
         />
 
+        </div>
+        <div className="flex items-center justify-around">
+        <FormField
+          control={form.control}
+          name="jobTags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="block text-sm font-medium text-gray-700">Job Tags</FormLabel>
+              <FormControl>
+              <Input placeholder="Tags" type="text" {...field} className="mt-1 p-2 border rounded-md flex-1" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="country"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="block text-sm font-medium text-gray-700">Country</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter Country" type="text" {...field} className="mt-1 p-2 border rounded-md flex-1" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="state"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="block text-sm font-medium text-gray-700">Place</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter Place" type="text" {...field} className="mt-1 p-2 border rounded-md flex-1" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         </div>
         <div className="flex items-center justify-around">
         <Button type="submit" className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-md">

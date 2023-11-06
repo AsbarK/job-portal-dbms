@@ -6,10 +6,11 @@ export async function POST(request:NextRequest){
     try {
         const reqBody = await request.json()
         const jobId = uniqueId()
-        let {posted_employee,jobDescription,jobTitle,startDate,endDate,salreyStart,salreyEnd,jobTags,jobLocations} = reqBody
-        if(typeof(posted_employee) === "string"){
-            posted_employee = parseInt(posted_employee)
-        }
+        const posted_employee = request.cookies.get('empId')?.value
+        let {jobDescription,jobTitle,startDate,endDate,salreyStart,salreyEnd,jobTags,jobLocations} = reqBody
+        // if(typeof(posted_employee) === "string"){
+        //     posted_employee = parseInt(posted_employee)
+        // }
         const q = "INSERT INTO Job(jobId,posted_employee,jobDescription,jobTitle,startDate,endDate,salreyStart,salreyEnd) VALUES(?,?,?,?,?,?,?,?)"
         const q1 = 'INSERT INTO jobLocation (jobId, country,state,locId) VALUES (?, ?,?,?)'
         const q2 = 'INSERT INTO jobTag (jobId,jobTagName,tagId) VALUES (?, ?,?)'
