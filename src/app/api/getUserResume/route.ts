@@ -4,11 +4,11 @@ import db from "@/db/dbConnection";
 export async function GET(request:NextRequest){
     try {
         const cockieStore = request.cookies
-        let empId = cockieStore.get('empId')
-        const q = "SELECT jobType,jobDescription,jobTitle,startDate,endDate FROM Job WHERE Job.posted_employee=?"
+        let userId = cockieStore.get('userId')?.value
+        const q = "SELECT * FROM UserResume WHERE userId=?"
         const data:any = await Promise.all([
         new Promise((resolve,reject)=>{
-            db.query(q,[empId],(err,data)=>{
+            db.query(q,[userId],(err,data)=>{
                 if(err){
                     reject(err)
                 }
@@ -18,10 +18,8 @@ export async function GET(request:NextRequest){
             })
         })
     ])
-    if(!data[0][0]){
-        return NextResponse.json({msg:"No Jobs Available for Employee"},{status: 404})
-    }
-    return NextResponse.json({msg:"Job's for the given Employee are",data:data[0][0]},{ status: 200 })
+    console.log(data[0])
+    return NextResponse.json({msg:"User Resumes are",data:data[0]},{ status: 200 })
         
     } catch (error) {
         console.log(error)
