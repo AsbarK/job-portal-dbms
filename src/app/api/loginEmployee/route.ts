@@ -17,7 +17,7 @@ export async function POST(request:NextRequest) {
                 })
             })
         ])
-        if(result[0][0].empId){
+        if(result[0][0]){
             const empId = result[0][0].empId
             return NextResponse.json({msg:"Employee login sucessfull",empId})
         }

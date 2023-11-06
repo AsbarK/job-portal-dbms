@@ -31,6 +31,7 @@ import {
 import axios from "axios"
 import { useEffect,useState } from "react"
 import toast from 'react-hot-toast';
+import { useRouter } from "next/navigation"
 
 
 
@@ -43,6 +44,7 @@ const FormSchema = z.object({
 })
 
 export default function ResumeApplyForm({jobId}:{jobId:string}) {
+  const router = useRouter();
   const [resumeNames,setResumeNames] = useState<[{resumeId:number;userId:number;resumeName:string}]>([{resumeId: 0,userId:0,resumeName:''}])
 
   useEffect(()=>{
@@ -53,7 +55,7 @@ export default function ResumeApplyForm({jobId}:{jobId:string}) {
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    axios.post('http://localhost:3000/api/registerJob',{jobId:parseInt(jobId),user_resume:data.resume.resumeId}).then((data)=>{toast.success('Successfull');
+    axios.post('http://localhost:3000/api/registerJob',{jobId:parseInt(jobId),user_resume:data.resume.resumeId}).then((data)=>{toast.success('Successfull');router.push('/allJobs');
   }).catch((error) => {
     toast.error("Error")
     console.error(error);

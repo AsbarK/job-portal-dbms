@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
                 });
             })
         ]);
-        return NextResponse.json({ msg: "User created successfully",firstName, lastName, mobile, email, city});
+        return NextResponse.json({ msg: "User created successfully",firstName, lastName, mobile, email, city,id:timestamp});
     } catch (error) {
         console.error(error);
         return NextResponse.json({ msg: "Something went wrong (try With different mobile number)" }, { status: 500 });

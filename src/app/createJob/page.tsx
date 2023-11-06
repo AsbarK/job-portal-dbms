@@ -1,4 +1,4 @@
-// Import necessary dependencies and components
+
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -25,6 +25,7 @@ import toast from 'react-hot-toast';
 import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { useCookies } from "next-client-cookies"
+import { useRouter } from "next/navigation"
 
 
 
@@ -45,6 +46,7 @@ const formSchema = z.object({
 // Job openings input form component
 export default function JobForm() {
   const cockieStore = useCookies()
+  const router = useRouter();
   if(cockieStore.get('userId')){
     return(
       <>
@@ -66,7 +68,8 @@ export default function JobForm() {
     axios.post('http://localhost:3000/api/createJob',{
       ...data,jobTags:data.jobTags.split(','),jobLocations:[[data.country,data.state]],startDate:format(data.startDate,"yyyy-MM-dd"),endDate:format(data.endDate,"yyyy-MM-dd")
     }).then(()=>(
-      toast.success('Successfully Created Job')
+      toast.success('Successfully Created Job'),
+      router.push('/allJobs')
     )).catch(()=>(
       toast.error('Error in Creating Job Please Try Again')
     ))

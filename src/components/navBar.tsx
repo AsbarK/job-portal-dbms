@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/hover-card"
 import { useCookies } from 'next-client-cookies';
 import { Button } from "@/components/ui/button"
+import { useRouter } from 'next/navigation';
+import AddResume from './addResume';
 
 function NavBar({firstName,lastName,email}:{firstName:string;lastName?:string;email:string}) {
   return (
@@ -20,6 +22,7 @@ function NavBar({firstName,lastName,email}:{firstName:string;lastName?:string;em
 
 function NavItem({firstName,lastName,email}:{firstName:string;lastName?:string;email:string}) {
   const cockieStore = useCookies()
+  const router = useRouter();
   const emp = cockieStore.get('empId')
   return (
     <>
@@ -30,6 +33,7 @@ function NavItem({firstName,lastName,email}:{firstName:string;lastName?:string;e
             <div className='flex gap-4 items-center'>
                 <div className='cursor-pointer hover:text-muted-foreground'>Home</div>
                 <Link className='cursor-pointer hover:text-muted-foreground' href='/allJobs'>Find Job</Link>
+                {emp ? <Link className='cursor-pointer hover:text-muted-foreground' href='/createJob'>Create Job</Link> : <AddResume />}
                 <ModeToggle />
               <HoverCard>
                 <HoverCardTrigger asChild>
@@ -49,7 +53,7 @@ function NavItem({firstName,lastName,email}:{firstName:string;lastName?:string;e
                         <p className="text-sm">
                           {email}
                         </p>
-                        <Button onClick={()=>(emp ? cockieStore.remove('empId') : cockieStore.remove('userId'))}>Logout</Button>
+                        <Button onClick={()=>(emp ? (cockieStore.remove('empId'),router.push('/loginEmployee')) : (cockieStore.remove('userId'),router.push('/loginUser')))}>Logout</Button>
                       </div>
                     </div>
                   </HoverCardContent>
