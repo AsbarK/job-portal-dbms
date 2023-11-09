@@ -8,7 +8,7 @@ export async function GET(request:NextRequest){
         const q = "SELECT * FROM UserResume WHERE userId=?"
         const data:any = await Promise.all([
         new Promise((resolve,reject)=>{
-            db.query(q,[userId],(err,data)=>{
+            db.query(q,[parseInt(userId!)],(err,data)=>{
                 if(err){
                     reject(err)
                 }
