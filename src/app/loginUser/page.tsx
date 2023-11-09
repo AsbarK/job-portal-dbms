@@ -27,6 +27,9 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import Link from "next/link"
 import { useRouter } from 'next/navigation';
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
+
 
 const formSchemaLogin = z.object({
   userName: z.string().min(2, {
@@ -89,7 +92,7 @@ export default function LoginUser() {
   }
 
   function onSubmitLogin(values: z.infer<typeof formSchemaLogin>) {
-    axios.post('http://localhost:3000/api/loginUser',values)
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/loginUser`,values)
       .then((data) => {
         if(data.status === 200) {
           cockieStore.set('userId', data.data.userId);
@@ -104,7 +107,7 @@ export default function LoginUser() {
   }
 
   function onSubmitRegister(value: z.infer<typeof formSchemaRegister>) {
-    axios.post('http://localhost:3000/api/registerUser',value)
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/registerUser`,value)
       .then((data) => {
         console.log(data);
         cockieStore.set('userId', data.data.id);

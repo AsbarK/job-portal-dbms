@@ -4,12 +4,14 @@ import axios from "axios";
 import Search from "@/components/searchBar";
 import Jobs from "@/components/jobs";
 import Link from "next/link";
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
 type Job={jobTagNames:Array<string>;jobTitle:string;jobDiscription:string;country:string;state:string;salreyStart:string;salreyEnd:string;jobId:string}
 export default function AllJobs() {
     const [job, setJob] = useState<Job[]>([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/getALLJob')
+        axios.get(`${process.env.NEXT_PUBLIC_URL_LINK}/api/getALLJob`)
             .then((res) => (setJob(res.data.data)))
             .catch((error) => {
                 console.error("Error fetching jobs:", error);

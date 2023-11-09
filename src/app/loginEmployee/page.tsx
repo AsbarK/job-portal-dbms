@@ -27,6 +27,10 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
+
+
 
 const formSchemaLogin = z.object({
   userName: z.string().min(2, {
@@ -77,11 +81,11 @@ export default function LoginUser() {
     )
   }
   function onSubmitLogin(values: z.infer<typeof formSchemaLogin>) {
-    axios.post('http://localhost:3000/api/loginEmployee',values).then((data)=>(console.log(data.status),data.status === 200 ? (cockieStore.set('empId',data.data.empId), toast.success('Success'),router.push('/')): (console.log(data.status), toast.error('Employee Exits'))))
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/loginEmployee`,values).then((data)=>(console.log(data.status),data.status === 200 ? (cockieStore.set('empId',data.data.empId), toast.success('Success'),router.push('/')): (console.log(data.status), toast.error('Employee Exits'))))
     console.log(values)
   }
   function onSubmitRegister(value: z.infer<typeof formSchemaRegister>) {
-    axios.post('http://localhost:3000/api/registerEmployee',value).then((data)=>(console.log(data),cockieStore.set('empId',data.data.id),toast.success('Success'),router.push('/')))
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/registerEmployee`,value).then((data)=>(console.log(data),cockieStore.set('empId',data.data.id),toast.success('Success'),router.push('/')))
     console.log(value)
   }
   return (

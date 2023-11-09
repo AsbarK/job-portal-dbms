@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { useCookies } from "next-client-cookies"
 import { useRouter } from "next/navigation"
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
 
 
 
@@ -65,7 +67,7 @@ export default function JobForm() {
   function onSubmit(data: z.infer<typeof formSchema>) {
     // console.log(format(data.startDate,"yyyy-MM-dd"))
 
-    axios.post('http://localhost:3000/api/createJob',{
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/createJob`,{
       ...data,jobTags:data.jobTags.split(','),jobLocations:[[data.country,data.state]],startDate:format(data.startDate,"yyyy-MM-dd"),endDate:format(data.endDate,"yyyy-MM-dd")
     }).then(()=>(
       toast.success('Successfully Created Job'),
