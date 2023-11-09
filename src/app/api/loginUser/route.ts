@@ -4,7 +4,7 @@ export async function POST(request:NextRequest) {
     try {
         const reqBody = await request.json();
         const { userName, password } = reqBody;
-        const q = 'SELECT userId FROM login WHERE login_username = ? AND user_password = ?';
+        const q = 'SELECT userId FROM Login WHERE login_username = ? AND user_password = ?';
 
         try {
             const result:any = await Promise.all([
