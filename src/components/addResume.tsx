@@ -16,6 +16,10 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import * as z from "zod"
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
+
+
 const resumeNameType = z.object({
     resumeName:z.string().min(2,{message:'Required atleast two charecters'})
 })
@@ -23,7 +27,7 @@ export default function AddResume() {
     const [resumeName,setResumeName] = useState<z.infer<typeof resumeNameType>>()
     const handleFormSubmit = () => {
         if (resumeName?.resumeName) {
-          axios.post('http://localhost:3000/api/userResume', { resumeName: resumeName.resumeName })
+          axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/userResume`, { resumeName: resumeName.resumeName })
             .then((data) => {
               if (data.status === 200) {
                 toast.success('Successfully added Resume');

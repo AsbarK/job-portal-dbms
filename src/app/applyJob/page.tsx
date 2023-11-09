@@ -32,7 +32,8 @@ import axios from "axios"
 import { useEffect,useState } from "react"
 import toast from 'react-hot-toast';
 import { useRouter } from "next/navigation"
-
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
 
 
 const FormSchema = z.object({
@@ -48,14 +49,14 @@ export default function ResumeApplyForm({jobId}:any) {
   const [resumeNames,setResumeNames] = useState<[{resumeId:number;userId:number;resumeName:string}]>([{resumeId: 0,userId:0,resumeName:''}])
 
   useEffect(()=>{
-    axios.get('http://localhost:3000/api/getUserResume').then((data)=>(setResumeNames(data.data.data)))
+    axios.get(`${process.env.NEXT_PUBLIC_URL_LINK}/api/getUserResume`).then((data)=>(setResumeNames(data.data.data)))
   },[])
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    axios.post('http://localhost:3000/api/registerJob',{jobId:parseInt(jobId),user_resume:data.resume.resumeId}).then((data)=>{toast.success('Successfull');router.push('/allJobs');
+    axios.post(`${process.env.NEXT_PUBLIC_URL_LINK}/api/registerJob`,{jobId:parseInt(jobId),user_resume:data.resume.resumeId}).then((data)=>{toast.success('Successfull');router.push('/allJobs');
   }).catch((error) => {
     toast.error("Error")
     console.error(error);

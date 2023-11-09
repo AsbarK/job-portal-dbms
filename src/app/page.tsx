@@ -3,16 +3,19 @@ import NavBar from '@/components/navBar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCookies } from 'next-client-cookies';
+import dotenv from 'dotenv'
+dotenv.config({path:'.env.local' })
 
 export default function Home() {
   const cookieStore = useCookies();
   const [userDetails, setUserDetails] = useState<{ firstName: string; lastName?: string; email: string }>({ firstName: "", lastName: "", email: "" });
+  console.log(process.env.URL_LINK)
 
   useEffect(() => {
     if (cookieStore.get('userId')) {
-      axios.get('http://localhost:3000/api/getUserDetails').then((data) => (setUserDetails(data.data.result)));
+      axios.get(`${process.env.NEXT_PUBLIC_URL_LINK}/api/getUserDetails`).then((data) => (setUserDetails(data.data.result)));
     } else {
-      axios.get('http://localhost:3000/api/getEmployeeDetails').then((data) => (setUserDetails({ firstName: data.data.result.empName, email: data.data.result.emp_email })));
+      axios.get(`${process.env.NEXT_PUBLIC_URL_LINK}/api/getEmployeeDetails`).then((data) => (setUserDetails({ firstName: data.data.result.empName, email: data.data.result.emp_email })));
     }
   }, []);
 
