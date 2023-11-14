@@ -30,7 +30,7 @@ type jobCardProps = {avlink:string; avName:string;jobTags:Array<string>;jobTitle
                 <div className="m-2">
                 <Avatar>
                     <AvatarImage className="h-20 w-20" src={avlink} />
-                    <AvatarFallback className="h-20 w-20 rounded-2xl text-4xl font-bold">{avName[0]}</AvatarFallback>
+                    <AvatarFallback className="h-20 w-20 rounded-2xl text-4xl font-bold">{avName[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
                 </div>
                 <CardHeader>
