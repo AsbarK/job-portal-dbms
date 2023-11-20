@@ -31,7 +31,7 @@ function NavItem({firstName,lastName,email}:{firstName:string;lastName?:string;e
                 Job Portal
             </h1>
             <div className='flex gap-4 items-center'>
-                <div className='cursor-pointer hover:text-muted-foreground'>Home</div>
+                <Link className='cursor-pointer hover:text-muted-foreground' href='/'>Home</Link>
                 {emp ? <Link className='cursor-pointer hover:text-muted-foreground' href='/allEmpJobs'>Posted By You</Link> : <Link className='cursor-pointer hover:text-muted-foreground' href='/allJobs'>Find Job</Link>}
                 {emp ? <Link className='cursor-pointer hover:text-muted-foreground' href='/createJob'>Create Job</Link> : <AddResume />}
                 <ModeToggle />
