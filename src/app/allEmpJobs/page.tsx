@@ -24,7 +24,7 @@ export default function AllJobs() {
         <Link href={'/'} className="text-purple-500 underline">Home</Link>
         </div>
         <div className="grid gap-4 grid-cols-3">
-            {job && <Jobs jobs={job}/>}
+            {job && <Jobs jobs={job} delete={true} edit={true}/>}
         </div>
         </>
     );

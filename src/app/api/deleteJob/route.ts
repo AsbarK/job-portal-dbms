@@ -3,8 +3,8 @@ import db from "@/db/dbConnection";
 
 export async function DELETE(request:NextRequest){
     try {
-        const reqBody = await request.json()
-        let {jobId} = reqBody
+        let jobId = request.headers.get('jobId')
+        console.log(jobId)
         if(!jobId){
             return NextResponse.json({msg:"No jobId in body"},{ status: 404 })
         }
